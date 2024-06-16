@@ -146,8 +146,12 @@ def p_cmd(regras):
                 regras[0] = f"{regras[1]} = {regras[3]} - {regras[5]};"
             elif regras[4] == '/':
                 regras[0] = f"{regras[1]} = {regras[3]} / {regras[5]};"
+        if regras[1] in variaveis_monitoradas:
+            regras[0] = regras[0] + "\n\t" + f'printf("%d\\n", {regras[1]});'
     elif regras[1] == 'ZERO':
         regras[0] = f"{regras[3]} = 0;"
+        if regras[3] in variaveis_monitoradas:
+            regras[0] = regras[0] + "\n\t" + f'printf("%d\\n", {regras[1]});'
     elif regras[1] == 'ENQUANTO':
         regras[0] = f"while ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}"
     elif regras[1] == 'IF':
@@ -159,11 +163,6 @@ def p_cmd(regras):
     elif regras[1] == 'EVAL':
         regras[
             0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
-
-    # var = ['Y']
-
-    # if regras[1] in var:
-    #     regras[0] = regras[0] + "\n\t" + f'printf("%d\\n", {regras[1]});'
 
 
 def p_error(regras):
