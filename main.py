@@ -170,9 +170,9 @@ def test_parser(data):
 def main():
     global variaveis_monitoradas
 
-    nome_arquivo_input = input("Digite o nome do arquivo .provol-one que deve ser o input do analisador (adicione a extensão): ")
+    nome_arquivo_input = input("Digite o nome do arquivo .provol-one que deve ser o input do analisador (não adicione a extensão .provol-one): ")
 
-    with open(f'{nome_arquivo_input}') as file:
+    with open(f'{nome_arquivo_input}.provol-one') as file:
         data = file.read()
     
     match = re.search(r'MONITOR (.*)\nEXECUTE', data)
