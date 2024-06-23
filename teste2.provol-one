@@ -1,0 +1,9 @@
+INICIO A
+MONITOR B, C
+EXECUTE
+    A = 5
+    B = A
+    C = B * 2
+    ZERO(A)
+    B = C * A
+TERMINO

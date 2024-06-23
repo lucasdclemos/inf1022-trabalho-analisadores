@@ -77,13 +77,7 @@ def p_programa(regras):
     '''
     programa : INICIO varlist MONITOR varlist EXECUTE cmds TERMINO
     '''
-    global variaveis_monitoradas
-    match = re.findall(r"[A-Z]", regras[4])
-    for var in match:
-        variaveis_monitoradas.append(var)
-
-    regras[
-        0] = f"int main(){{\n\t{regras[2]}\n\t{regras[4]}\n\t{regras[6]}\n\n\treturn 0;\n}}"
+    regras[0] = f"int main(){{\n\t{regras[2]}\n\t{regras[4]}\n\t{regras[6]}\n\n\treturn 0;\n}}"
 
 def p_varlist(regras):
     '''
@@ -147,11 +141,11 @@ def p_cmd(regras):
             elif regras[4] == '/':
                 regras[0] = f"{regras[1]} = {regras[3]} / {regras[5]};"
         if regras[1] in variaveis_monitoradas:
-            regras[0] = regras[0] + "\n\t" + f'printf("%d\\n", {regras[1]});'
+            regras[0] = regras[0] + "\n\t" + f'printf("{regras[1]}: %d\\n", {regras[1]});'
     elif regras[1] == 'ZERO':
         regras[0] = f"{regras[3]} = 0;"
         if regras[3] in variaveis_monitoradas:
-            regras[0] = regras[0] + "\n\t" + f'printf("%d\\n", {regras[1]});'
+            regras[0] = regras[0] + "\n\t" + f'printf("{regras[1]}: %d\\n", {regras[1]});'
     elif regras[1] == 'ENQUANTO':
         regras[0] = f"while ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}"
     elif regras[1] == 'IF':
@@ -161,8 +155,7 @@ def p_cmd(regras):
             regras[
                 0] = f"if ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
     elif regras[1] == 'EVAL':
-        regras[
-            0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
+        regras[0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
 
 
 def p_error(regras):
@@ -175,24 +168,20 @@ def test_parser(data):
     return result
 
 def main():
-    data = '''
-    INICIO X
-    MONITOR Y
-    EXECUTE
-    Y = 2
-    X = 5
-    ENQUANTO X FACA
-        Y = Y * 2
-        X = X - 1
-    FIM
-    TERMINO
-    '''
+    global variaveis_monitoradas
 
+    with open('teste2.provol-one') as file:
+        data = file.read()
+    
+    match = re.search(r'MONITOR (.*)\nEXECUTE', data)
+    vars = re.findall(r'[A-Z]', match.group(1))
+    for item in vars:
+        variaveis_monitoradas.append(item)
+          
     result = test_parser(data)
-    # print(variaveis_monitoradas)
     print(result)
 
-    f = open('teste.c', 'w')
+    f = open('codigo.c', 'w')
     f.write(result)
 
 if __name__ == '__main__':
