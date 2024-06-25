@@ -1,0 +1,11 @@
+INICIO A
+MONITOR B
+EXECUTE
+    ENQUANTO B FACA
+        IF A > 10 THEN 
+            A = A - B
+        ELSE
+            B = A / B
+        FIM
+    FIM
+TERMINO

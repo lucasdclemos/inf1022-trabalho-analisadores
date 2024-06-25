@@ -1,0 +1,9 @@
+INICIO A
+MONITOR B
+EXECUTE
+    A = 2
+    B = 10
+    IF A < B THEN 
+        A = A + B
+    FIM
+TERMINO

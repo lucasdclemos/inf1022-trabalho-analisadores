@@ -1,0 +1,18 @@
+INICIO A
+MONITOR B
+EXECUTE
+  B = 9
+  IF A = 7 THEN 
+  EVAL 
+    ZERO(A)
+    B = 3 + A
+  VEZES 15
+  FIM
+  ELSE
+    ZERO(B)
+  EVAL 
+    A = B - A
+  VEZES A
+  FIM
+  FIM
+TERMINO

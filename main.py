@@ -9,7 +9,7 @@ variaveis_monitoradas = []
 tokens_reservados = ('INICIO', 'TERMINO', 'VIRGULA', 'IGUAL', 'MONITOR',
                      'EXECUTE', 'ENQUANTO', 'FACA', 'FIM', 'IF', 'THEN',
                      'ELSE', 'MULT', 'MAIS', 'ZERO', 'AP', 'FP', 'VEZES',
-                     'EVAL', 'MENOS', 'DIVISAO')
+                     'EVAL', 'MENOS', 'DIVISAO', 'MAIOR', 'MENOR')
 
 t_INICIO = r'INICIO'
 t_MONITOR = r'MONITOR'
@@ -32,6 +32,8 @@ t_AP = r'\('
 t_FP = r'\)'
 t_VEZES = r'VEZES'
 t_EVAL = r'EVAL'
+t_MAIOR = r'>'
+t_MENOR = r'<'
 
 def t_ID(t):
     r'[A-Z][A-Z0-9]*'
@@ -99,6 +101,25 @@ def p_cmds(regras):
     else:
         regras[0] = f"{regras[1]}\n\t{regras[2]}"
 
+def p_condicao(regras):
+    '''
+    condicao : ID IGUAL ID
+        | ID IGUAL NUMERO
+        | NUMERO IGUAL ID
+        | NUMERO IGUAL NUMERO
+        | ID MAIOR NUMERO
+        | ID MAIOR ID
+        | NUMERO MAIOR ID
+        | NUMERO MAIOR NUMERO
+        | ID MENOR NUMERO
+        | ID MENOR ID
+        | NUMERO MENOR ID
+        | NUMERO MENOR NUMERO
+    '''
+    if regras[2] == '=':
+        regras[0] = f"{regras[1]} {regras[2]}{regras[2]} {regras[3]}"
+    else:
+        regras[0] = f"{regras[1]} {regras[2]} {regras[3]}"
 
 def p_cmd(regras):
     '''
@@ -122,8 +143,8 @@ def p_cmd(regras):
         | ID IGUAL ID DIVISAO ID
         | ZERO AP ID FP
         | ENQUANTO ID FACA cmds FIM
-        | IF ID THEN cmds FIM
-        | IF ID THEN cmds ELSE cmds FIM
+        | IF condicao THEN cmds FIM
+        | IF condicao THEN cmds ELSE cmds FIM
         | EVAL cmds VEZES ID FIM
         | EVAL cmds VEZES NUMERO FIM
     '''
@@ -145,15 +166,14 @@ def p_cmd(regras):
     elif regras[1] == 'ZERO':
         regras[0] = f"{regras[3]} = 0;"
         if regras[3] in variaveis_monitoradas:
-            regras[0] = regras[0] + "\n\t" + f'printf("{regras[1]}: %d\\n", {regras[1]});'
+            regras[0] = regras[0] + "\n\t" + f'printf("{regras[3]}: %d\\n", {regras[3]});'
     elif regras[1] == 'ENQUANTO':
         regras[0] = f"while ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}"
     elif regras[1] == 'IF':
         if regras[5] == 'FIM':
-            regras[0] = f"if ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}"
+            regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}"
         elif regras[5] == 'ELSE':
-            regras[
-                0] = f"if ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
+            regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
     elif regras[1] == 'EVAL':
         regras[0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
 

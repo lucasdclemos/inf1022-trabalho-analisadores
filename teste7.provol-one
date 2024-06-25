@@ -1,0 +1,12 @@
+INICIO A
+MONITOR B
+EXECUTE
+  B = 9
+  IF A = 9 THEN 
+    ENQUANTO B FACA
+      A = A * B
+    FIM
+  ELSE
+    ZERO(B)
+  FIM
+TERMINO

@@ -1,0 +1,22 @@
+INICIO A, C, D
+MONITOR B, E
+EXECUTE
+  B = 9
+  E = B /3
+  ZERO(A)
+  EVAL 
+    D = 3 + E
+  VEZES B
+  FIM
+  IF A > E THEN
+    B = E * A
+    C = B / 4
+    E = 3 + 4
+  ELSE
+    ENQUANTO E FACA
+      ZERO(B)
+      C = A + 1
+      D = E * 2
+    FIM
+  FIM
+TERMINO

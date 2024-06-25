@@ -1,0 +1,10 @@
+INICIO A
+MONITOR B, C
+EXECUTE
+    IF A > 0 THEN 
+        A = A * B
+    ELSE
+        C = 9 + A
+        B = A / 3
+    FIM
+TERMINO

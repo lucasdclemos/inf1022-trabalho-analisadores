@@ -1,0 +1,9 @@
+INICIO A
+MONITOR B
+EXECUTE
+    ENQUANTO B FACA
+        IF A = 5 THEN 
+            A = A + B
+        FIM
+    FIM
+TERMINO
