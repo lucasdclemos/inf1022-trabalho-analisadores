@@ -143,7 +143,9 @@ def p_cmd(regras):
         | ID IGUAL ID DIVISAO ID
         | ZERO AP ID FP
         | ENQUANTO ID FACA cmds FIM
+        | IF ID THEN cmds FIM
         | IF condicao THEN cmds FIM
+        | IF ID THEN cmds ELSE cmds FIM
         | IF condicao THEN cmds ELSE cmds FIM
         | EVAL cmds VEZES ID FIM
         | EVAL cmds VEZES NUMERO FIM
@@ -171,9 +173,15 @@ def p_cmd(regras):
         regras[0] = f"while ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}"
     elif regras[1] == 'IF':
         if regras[5] == 'FIM':
-            regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}"
+            if "==" not in regras[2] and ">" not in regras[2] and "<" not in regras[2]:
+                regras[0] = f"if ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}"
+            else:
+                regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}"
         elif regras[5] == 'ELSE':
-            regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
+            if "==" not in regras[2] and ">" not in regras[2] and "<" not in regras[2]:
+                regras[0] = f"if ({regras[2]} > 0){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
+            else:
+                regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
     elif regras[1] == 'EVAL':
         regras[0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
 

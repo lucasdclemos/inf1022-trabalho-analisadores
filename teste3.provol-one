@@ -1,7 +1,7 @@
 INICIO A
 MONITOR B, C
 EXECUTE
-    IF A > 0 THEN 
+    IF A THEN 
         A = A * B
     ELSE
         C = 9 + A
