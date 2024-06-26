@@ -149,6 +149,10 @@ def p_cmd(regras):
         | IF condicao THEN cmds ELSE cmds FIM
         | EVAL cmds VEZES ID FIM
         | EVAL cmds VEZES NUMERO FIM
+        | EVAL AP NUMERO VIRGULA NUMERO VIRGULA cmds FP
+        | EVAL AP NUMERO VIRGULA ID VIRGULA cmds FP
+        | EVAL AP ID VIRGULA NUMERO VIRGULA cmds FP
+        | EVAL AP ID VIRGULA ID VIRGULA cmds FP
     '''
     global variaveis_monitoradas
     if regras[2] == '=':
@@ -183,7 +187,12 @@ def p_cmd(regras):
             else:
                 regras[0] = f"if ({regras[2]}){{\n\t{regras[4]}\n\t}}else{{\n\t{regras[6]}\n\t}}"
     elif regras[1] == 'EVAL':
-        regras[0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
+        if regras[2] == '(':
+            print("OI")
+            regras[0] = f"for (int i = {regras[3]}; i > {regras[5]}; i--){{\n\t{regras[7]}\n\t}}"
+        else:
+            print("TCHAU")
+            regras[0] = f"for (int i = 0; i < {regras[4]}; i++){{\n\t{regras[2]}\n\t}}"
 
 
 def p_error(regras):
@@ -202,8 +211,9 @@ def main():
 
     with open(f'{nome_arquivo_input}.provol-one') as file:
         data = file.read()
-    
-    match = re.search(r'MONITOR (.*)\nEXECUTE', data)
+        print(data)
+
+    match = re.search(r'MONITOR (.*)\s+EXECUTE', data)
     vars = re.findall(r'[A-Z]', match.group(1))
     for item in vars:
         variaveis_monitoradas.append(item)
